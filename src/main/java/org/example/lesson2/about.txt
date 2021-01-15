@@ -1,0 +1,10 @@
+T - тип/класс объекта
+T extends RandomClass&Intreface1&Interface2   - Только те классы, которые наследуют RandomClass и имплементируют интерфейсы Interface1 и Interface2
+Пример:
+List<T extends RandomClass> list = new ArrayList<>();
+
+? - Это WildCard, он является высшим родителем для всех дженериков, под этот тип можно подставлять любые классы. Он универсальный.
+
+? extends Number  - эта запись означает, что может быть подставлен класс Number или его дети (Integer, Double)
+
+? super Integer  - эта запись означает, что может быть подставлен на это место класс Integer или его родители.
