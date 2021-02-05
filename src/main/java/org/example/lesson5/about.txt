@@ -1,0 +1,52 @@
+лямбда выражения уменьшают написание кода, лямбда позволяет реализовать функциональный
+интерфейс (интерфейс только с одним методом) без создания класса реализующего функциональный
+интерфейс. Лямбда выражения можно использовать на месте интерфейса только с одним методом.
+Лямбда выражения это замена анонимных классов.
+Внешние переменные можно использовать в теле лямда выражения, но тогда это переменная должна
+быть final или нигде не изменяться.
+
+интерфейс Predicate<T> и его метод boolean test(T t) - можно использовать для создания какого-нибудь условия
+интерфейс Supplier<T> и его метод get()   - Возвращает объект
+интерфейс Consumer<T> и его метод void accept(T t);
+интерфейс Function<T,R> и его метод R apply(T t);
+
+
+Лямба выражения можно писать так:
+
+(Student s) -> {return s.age>21;}
+
+И так:
+
+s ->s.age>21
+
+void studentsCheck(List<Student> students, StudentCheck sc){
+        for (Student s : students){
+            if (sc.check(s)){
+                System.out.println(s);
+            }
+        }
+    }
+
+StudentInfo studentInfo = new StudentInfo();
+//        studentInfo.studentsCheck(students, (Student s) -> {return s.age>21;});
+        studentInfo.studentsCheck(students, s -> s.age>21);
+    }
+
+}
+interface StudentCheck{
+    boolean check(Student s);
+}
+
+
+
+Можно и так:
+studentInfo.studentsCheck(students, s -> {
+System.out.println("Hello");
+return s.age>21;
+});
+
+И так:
+anyMethod( () -> 5 );
+
+И так:
+StudentCheck sc = (Student s) -> {return s.age>21;};
