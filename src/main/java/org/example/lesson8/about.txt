@@ -1,0 +1,74 @@
+FileReader и FileWriter создают потоки для чтения/записи текстовой информации по символам
+Их минус в том что они за каждым символом обращаются к файлу
+
+BufferedReader и BufferedWriter они имеют буфер памяти, обращаются к файлу реже чем FileReader и FileWriter
+
+FileInputStream и FileOutputStream - для работы с бинарными файлами
+
+DataInputStream и DataOutputStream - позволяют записывать/читать примитивные типы данных
+
+Cериализация - это сохранение java объекта в файл.
+Десериализация - это получения java объекта из файла.
+
+Чтобы сериализовать объекты они должны имплементировать интерфейс Serializible, все зависомости
+так же должны его имплементировать;
+
+transient - означает что данное поле не будет сериализоваться;
+
+serialVersionUID - версия класса, когда один разработчик меняет класс а другой использует старый (неизменённый) то
+десериализация не пройдёт, т.к. версии классов отличаются.
+Нужно самому задавать serialVersionUID :
+
+static final long serialVersionUID = 1; (при каждом изменении класса менять его на единицу, это как бы версия класса)
+
+В класс File можно помещать как файл так и дирректорию. С помощью объекта это класса можно создавать файлы/паки, удалять,
+просматривать, изменять, читать, записывать. Просматривать длину, файлы, получать абсолютный и относительный путь.
+
+
+Path - интрерфейс для работы с путями к файлам
+path.resolve(otherPath) - объединения двух путей, к path добавляется otherPath;
+
+path.relativize(otherPath) - найти путь к otherPath от path;
+
+Files.copy(filePath, directoryPath.resolve(filePath)); - Копирование файла
+(filePath - какой файл, directoryPath.resolve(название файла) - куда;
+
+Files.copy(filePath, directoryPath.resolve("test16.txt"), StandardCopyOption.REPLACE_EXISTING);
+- Копирование файла, а если он есть - перезаписать
+
+Files.move() - для перемещения файла/папки в другое место. Можно так же переименовывать файлы с помощью
+этого метода посредством перемещения но уже под другим именем.
+Files.move(filePath, Paths.get("test11.txt"));
+Files.delete(filePath); - удаление файла
+
+Files.walkFileTree(filePath, new MyFileVisitor()); - метод для копирования/удаления всей папки
+Для удаления/копирования всей папки нужно использовать класс имплементирующий интерфейс FileVisitor<>
+или расширять класс SimpleFileVisitor<> и переопределять 4 метода:
+
+Метод, отвечающий за действия при входе в папку
+ @Override
+    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+        System.out.println("Enter in directory " + dir);
+        return FileVisitResult.CONTINUE;
+    }
+
+Метод, отвечающий за действия с файлами
+    @Override
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        System.out.println("File name: " + file.getFileName());
+        return FileVisitResult.CONTINUE;
+    }
+
+Метод, отвечающий за действия в случае возникновения какой-то ошибки
+    @Override
+    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+        System.out.println("Error while visiting file: " + file.getFileName());
+        return FileVisitResult.TERMINATE;
+    }
+
+Метод, отвечающий за действия при выходе из папки
+    @Override
+    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+        System.out.println("Exit from directory: " + dir);
+        return FileVisitResult.CONTINUE;
+    }
